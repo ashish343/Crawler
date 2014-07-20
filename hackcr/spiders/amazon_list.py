@@ -3,8 +3,12 @@ import scrapy
 from scrapy import log
 from scrapy.selector import Selector
 from scrapy.spider import Spider
+import re
 
 file_name='seller_asin_list';
+
+#seller seller=AZL93SHLUWFMN
+#merchantId m=AZL93SHLUWFMN
 
 class AmazonListSpider(Spider):
     name = "amazon_list"
@@ -14,7 +18,7 @@ class AmazonListSpider(Spider):
 
 	self.start_urls = []
         for ix in range(20):
-	    self.start_urls.append('http://www.amazon.in/gp/aag/ajax/productWidget.html?seller=AZL93SHLUWFMN&currentPage=' + str(ix+1));
+	    self.start_urls.append('http://www.amazon.in/gp/aag/ajax/productWidget.html?seller=AQWKOB3TGIWJN&currentPage=' + str(ix+1));
 		
     def parse(self, response):
 	
@@ -25,5 +29,6 @@ class AmazonListSpider(Spider):
         for asin in asins:
             link = asin.xpath('a/@href').extract()
 	    if link and link[0]:
-   	        f.write(link[0] + "\n")
+		finalASIN = re.match(".*dp\/(.*)", link[0]);
+   	        f.write(str(finalASIN.groups(1)) + "\n")
         f.close()
