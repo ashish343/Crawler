@@ -26,9 +26,14 @@ class AmazonListSpider(Spider):
         asins = sel.xpath('//*[@id="AAGProductWidgetButtonWrapper"]/div/ul/li/ul/li')
 
         f = open('seller_asin_list', 'a')
+	removeDuplicate = dict()
+	
         for asin in asins:
             link = asin.xpath('a/@href').extract()
 	    if link and link[0]:
-		finalASIN = re.match(".*dp\/(.*)", link[0]);
-   	        f.write(str(finalASIN.groups(1)) + "\n")
+		extractedASIN = re.match(".*dp\/(.*)", link[0]);
+	        finalASIN = str(extractedASIN.groups(1))[3:13]
+		if not (finalASIN in removeDuplicate):
+		    f.write(finalASIN + "\n")
+		    removeDuplicate[finalASIN] = 1
         f.close()
