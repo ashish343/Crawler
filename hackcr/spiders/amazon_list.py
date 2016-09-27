@@ -23,7 +23,7 @@ class AmazonListSpider(Spider):
     def parse(self, response):
 	
 	sel = Selector(response)
-        asins = sel.xpath('//*[@id="AAGProductWidgetButtonWrapper"]/div/ul/li/ul/li')
+        asins = sel.xpath('//*[@id="AAGProductWidgetButtonWrapper"]/div/ul/li/')
 
         f = open('seller_asin_list', 'a')
 	removeDuplicate = dict()
